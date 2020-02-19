@@ -53,11 +53,11 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     q = deque([])
     q.append(s)
 
-    while q:
-    #     q.get(s)
+#     while q:
+#     #     q.get(s)
 
-        for word in dictionary_file:
-            print(word)
+#         for word in dictionary_file:
+#             print(word)
 
     print(dictionary_file)
     return
