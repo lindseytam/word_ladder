@@ -51,40 +51,34 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     q = deque([]) #create queue
     q.append(s) # enqueue stack onto queue
 
-
     file = open("words5.dict", "r")
     file = file.read().split("\n")
 
     if start_word == end_word:
-        print(s)
+        # print(s)
         return s
 
     while q: # while queue not empty
         # print("q = ", q)
 
         dequeue_stack = q.pop() #dequeue stack from queue
-        differences = _diff(dequeue_stack[-1], end_word)
+
 
         for word in file:
 
-            if _adjacent(word, dequeue_stack[-1]) and len(differences) >= len(_diff(word, end_word)):
+            if _adjacent(word, dequeue_stack[-1]) :
 
                 if word == end_word:
                     dequeue_stack.append(word)
                     print("dequeue_stack = ", dequeue_stack)
                     return dequeue_stack
 
-                # print("dequeue_stack = ", dequeue_stack)
-                differences = _diff(word, end_word)
                 copy_s = copy.deepcopy(dequeue_stack)
                 copy_s.append(word)
                 q.append(copy_s)
                 file.remove(word)
 
 
-
-
-    print("returning none")
     return None
 
 def verify_word_ladder(ladder):
@@ -123,15 +117,3 @@ def _adjacent(word1, word2):
             diff_char.append(word1[i])
 
     return len(diff_char) == 1
-
-def _diff(word1, word2):
-
-    diff_index = []
-
-    for i in range(len(word1)):
-        if word1[i] != word2[i]:
-            diff_index.append(i)
-
-    return diff_index
-
-
