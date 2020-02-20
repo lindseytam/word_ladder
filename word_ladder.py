@@ -1,8 +1,9 @@
 #!/bin/python3
 
 
-from collections import *
 
+from collections import *
+import copy
 
 class Stack:
     def __init__(self):
@@ -48,19 +49,39 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     the function returns `None`.
     '''
 
-    s = []
-    s.append(start_word)
-    q = deque([])
-    q.append(s)
+    s = [] # create a stack
+    s.append(start_word) # push start_word on stack
+    q = deque([]) #create queue
+    q.append(s) # enqueue stack onto queue
+    # print("q = ", q)
 
-#     while q:
-#     #     q.get(s)
+    file = open("words5.dict", "r")
+    file = file.read().split("\n")
 
-#         for word in dictionary_file:
-#             print(word)
+    while q: # while queue not empty
+        # print("q = ", q)
+        dequeue_stack = q.pop() #dequeue stack from queue
 
-    print(dictionary_file)
-    return
+        print("dequeue_stack = ", dequeue_stack)
+        # print("stack_val = ", elem)
+        for word in file:
+            # print(str(dequeue_stack.pop))
+            # print("_adjacent(word, str(dequeue_stack.pop)) = ", _adjacent(word, str(dequeue_stack.pop)))
+            if _adjacent(word, dequeue_stack[-1]):
+                # print(word)
+                if word == end_word:
+                    dequeue_stack.append(word)
+                    # print("dequeue_stack = ", dequeue_stack)
+                    print(q.pop())
+                    return dequeue_stack
+                copy_s = copy.deepcopy(dequeue_stack)
+                copy_s.append(word)
+                q.append(copy_s)
+                file.remove(word)
+            # print(word)
+
+    # print(copy_s)
+    # return s
 
 def verify_word_ladder(ladder):
     '''
@@ -69,16 +90,16 @@ def verify_word_ladder(ladder):
     '''
 
     if not ladder:
-        print("empty, false")
+        # print("empty, false")
         return False
 
     for i in range(len(ladder)):
         if i != len(ladder)-1 and not _adjacent(ladder[i], ladder[i+1]):
-            print("False")
+            # print("False")
             return False
 
 
-    print("TRUE")
+    # print("TRUE")
     return True
 
 
@@ -97,19 +118,20 @@ def _adjacent(word1, word2):
     diff_char = []
 
     if len(word1) != len(word2):
-        print("False")
+        # print("False")
         return False
 
     for i in range(len(word1)):
         if word1[i] != word2[i]:
             diff_char.append(word1[i])
 
-    print(len(diff_char) == 1)
+    # print(len(diff_char) == 1)
     return len(diff_char) == 1
 
 
 
 # word_ladder('stone','money')
 # verify_word_ladder(['stone', 'shone', 'phone', 'phony', 'peony', 'benny', 'bonny', 'boney', 'money'])
-word_ladder('aloof','aloof')
-
+# word_ladder('aloof','aloof')
+# word_ladder('money','stone')
+word_ladder('stone','phone')
