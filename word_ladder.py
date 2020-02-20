@@ -1,6 +1,4 @@
 #!/bin/python3
-
-
 from collections import *
 import copy
 
@@ -52,10 +50,8 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     s.append(start_word) # push start_word on stack
     q = deque([]) #create queue
     q.append(s) # enqueue stack onto queue
-    # print("q = ", q)
 
-    differences = _diff(start_word, end_word)
-    # print(len(differences))
+
     file = open("words5.dict", "r")
     file = file.read().split("\n")
 
@@ -65,32 +61,31 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
 
     while q: # while queue not empty
         # print("q = ", q)
-        dequeue_stack = q.pop() #dequeue stack from queue
 
-        # print("dequeue_stack = ", dequeue_stack)
-        # print("stack_val = ", elem)
+        dequeue_stack = q.pop() #dequeue stack from queue
+        differences = _diff(dequeue_stack[-1], end_word)
+
         for word in file:
-            # print(str(dequeue_stack.pop))
-            # print("_adjacent(word, str(dequeue_stack.pop)) = ", _adjacent(word, str(dequeue_stack.pop)))
+
             if _adjacent(word, dequeue_stack[-1]) and len(differences) >= len(_diff(word, end_word)):
-                # print(word)
-                print(len(_diff(word, end_word)))
-                differences = _diff(word, end_word)
+
                 if word == end_word:
                     dequeue_stack.append(word)
                     print("dequeue_stack = ", dequeue_stack)
-                    # print(q.pop())
                     return dequeue_stack
+
+                # print("dequeue_stack = ", dequeue_stack)
+                differences = _diff(word, end_word)
                 copy_s = copy.deepcopy(dequeue_stack)
                 copy_s.append(word)
                 q.append(copy_s)
                 file.remove(word)
-            # print(word)
+
+
+
+
     print("returning none")
     return None
-
-    # print(copy_s)
-    # return s
 
 def verify_word_ladder(ladder):
     '''
@@ -121,25 +116,15 @@ def _adjacent(word1, word2):
     diff_char = []
 
     if len(word1) != len(word2):
-        # print("False")
         return False
 
     for i in range(len(word1)):
         if word1[i] != word2[i]:
             diff_char.append(word1[i])
 
-    # print(len(diff_char) == 1)
     return len(diff_char) == 1
 
 def _diff(word1, word2):
-    '''
-    Returns True if the input words differ by only a single character;
-    returns False otherwise.
-    >>> _adjacent('phone','phony')
-    True
-    >>> _adjacent('stone','money')
-    False
-    '''
 
     diff_index = []
 
@@ -147,14 +132,6 @@ def _diff(word1, word2):
         if word1[i] != word2[i]:
             diff_index.append(i)
 
-    # print(len(diff_char) == 1)
-
     return diff_index
-
-
-# word_ladder('stone','money')
-# verify_word_ladder(['stone', 'shone', 'phone', 'phony', 'peony', 'benny', 'bonny', 'boney', 'money'])
-# word_ladder('aloof','aloof')
-word_ladder('money','stone')
 
 
