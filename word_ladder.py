@@ -2,7 +2,6 @@
 
 from collections import *
 import copy
-
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -86,21 +85,14 @@ def _adjacent(word1, word2):
     False
     '''
 
-    return len(_diff(word1, word2)) == 1
+    diff_char = []
 
-def _diff(word1, word2):
-
-    diff_index = []
+    if len(word1) != len(word2):
+        return False
 
     for i in range(len(word1)):
         if word1[i] != word2[i]:
-            diff_index.append(i)
+            diff_char.append(word1[i])
 
-    return diff_index
-
-
-# word_ladder('stone','money')
-word_ladder('babes','child')
-# word_ladder('devil','angel')
-
+    return len(diff_char) == 1
 
