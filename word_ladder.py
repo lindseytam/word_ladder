@@ -3,25 +3,6 @@
 from collections import *
 import copy
 
-class Stack:
-    def __init__(self):
-        self.items = []
-
-    def isEmpty(self):
-        return self.items == []
-
-    def push(self, item):
-        self.items.append(item)
-
-    def pop(self):
-        return self.items.pop()
-
-    def peek(self):
-        return self.items[len(self.items) - 1]
-
-    def size(self):
-        return len(self.items)
-
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -47,37 +28,36 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     the function returns `None`.
     '''
 
-
     s = [] # create a stack
     s.append(start_word) # push start_word on stack
     q = deque([]) #create queue
     q.append(s) # enqueue stack onto queue
 
-    file = open(dictionary_file, "r")
-    file = file.read().split("\n")
+    file = open("words5.dict", "r")
+    global_word_list = file.read().split("\n")
 
     if start_word == end_word:
+        print(s)
         return s
 
-    while q: # while queue not empty
+    while q:
 
-        dequeue_stack = q.popleft() #dequeue stack from queue
+        dequeue_stack = q.popleft()
+        word_list = [word for word in global_word_list if _adjacent(word, dequeue_stack[-1])]
 
-        for word in file:
+        for word in word_list:
 
-            if _adjacent(word, dequeue_stack[-1]):
+            if word == end_word:
+                dequeue_stack.append(word)
+                print("dequeue_stack = ", dequeue_stack)
+                return dequeue_stack
 
-                if word == end_word:
-                    dequeue_stack.append(word)
-                    print(dequeue_stack)
-                    return dequeue_stack
+            copy_s = copy.deepcopy(dequeue_stack)
+            copy_s.append(word)
+            q.append(copy_s)
+            global_word_list.remove(word)
 
-                copy_s = copy.deepcopy(dequeue_stack)
-                copy_s.append(word)
-                q.append(copy_s)
-                file.remove(word)
-
-    print("None")
+    print("returning none")
     return None
 
 def verify_word_ladder(ladder):
@@ -106,16 +86,7 @@ def _adjacent(word1, word2):
     False
     '''
 
-    diff_char = []
-
-    if len(word1) != len(word2):
-        return False
-
-    for i in range(len(word1)):
-        if word1[i] != word2[i]:
-            diff_char.append(word1[i])
-
-    return len(diff_char) == 1
+    return len(_diff(word1, word2)) == 1
 
 def _diff(word1, word2):
 
@@ -127,5 +98,9 @@ def _diff(word1, word2):
 
     return diff_index
 
+
+# word_ladder('stone','money')
+word_ladder('babes','child')
+# word_ladder('devil','angel')
 
 
